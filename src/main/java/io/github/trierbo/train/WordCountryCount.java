@@ -8,10 +8,10 @@ import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
-public class WordClassCount {
+public class WordCountryCount {
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: WordClassCount <input path> <output path>");
+            System.err.println("Usage: WordCountryCount <input path> <output path>");
             System.exit(-1);
         }
 
@@ -19,9 +19,9 @@ public class WordClassCount {
         conf.set("mapreduce.ifile.readahead", "false");
         Job job = Job.getInstance(conf);
 
-        job.setJarByClass(WordClassCount.class);
-        job.setMapperClass(WordClassCountMapper.class);
-        job.setReducerClass(WordClassCountReducer.class);
+        job.setJarByClass(WordCountryCount.class);
+        job.setMapperClass(WordCountryCountMapper.class);
+        job.setReducerClass(WordCountryCountReducer.class);
         job.setOutputKeyClass(TextPair.class);
         job.setOutputValueClass(IntWritable.class);
 
