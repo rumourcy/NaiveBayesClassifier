@@ -28,8 +28,8 @@ public class WordCountryCount {
         job.setOutputKeyClass(TextPair.class);
         job.setOutputValueClass(IntWritable.class);
 
-        MultipleOutputs.addNamedOutput(job, "wordCountryCount", TextOutputFormat.class, TextPair.class, IntWritable.class);
-        MultipleOutputs.addNamedOutput(job, "countryCount", TextOutputFormat.class, Text.class, IntWritable.class);
+        MultipleOutputs.addNamedOutput(job, "word", TextOutputFormat.class, TextPair.class, IntWritable.class);
+        MultipleOutputs.addNamedOutput(job, "country", TextOutputFormat.class, Text.class, IntWritable.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));

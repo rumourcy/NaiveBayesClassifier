@@ -1,5 +1,6 @@
 package io.github.trierbo.train;
 
+import io.github.trierbo.utils.CacheURL;
 import io.github.trierbo.utils.TextPair;
 import org.apache.commons.collections.map.HashedMap;
 import org.apache.hadoop.fs.FileSystem;
@@ -21,8 +22,8 @@ public class JoinWordCountryMapper extends Mapper<LongWritable, Text, TextPair, 
     private HashMap<TextPair, Integer> wordCountryMaps = new HashMap<>();
 
     protected void setup(Context context) throws IOException {
-        FileSystem fs = FileSystem.get(URI.create(JoinWordCountry.WORD_COUNTRY_URL), context.getConfiguration());
-        try (InputStream in = fs.open(new Path(JoinWordCountry.WORD_COUNTRY_URL));
+        FileSystem fs = FileSystem.get(URI.create(CacheURL.WORD_COUNTRY_URL), context.getConfiguration());
+        try (InputStream in = fs.open(new Path(CacheURL.WORD_COUNTRY_URL));
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String line;
             String pair[];

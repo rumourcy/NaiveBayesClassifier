@@ -1,5 +1,6 @@
 package io.github.trierbo.train;
 
+import io.github.trierbo.utils.CacheURL;
 import io.github.trierbo.utils.TextPair;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
@@ -11,9 +12,6 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 import java.net.URI;
 
 public class CondProbability {
-
-    static final String COUNTRY_URL = "hdfs:///user/falcon/result/word_country_count/countryCount-r-00000";
-    static final String WORD_DICT_URL = "hdfs:///user/falcon/result/word_dict/part-r-00000";
 
     public static void main(String args[]) throws Exception {
         if (args.length != 2) {
@@ -31,7 +29,8 @@ public class CondProbability {
         job.setOutputKeyClass(TextPair.class);
         job.setOutputValueClass(DoubleWritable.class);
 
-        job.addCacheFile(URI.create(COUNTRY_URL));
+        job.addCacheFile(URI.create(CacheURL.COUNTRY_URL));
+        job.addCacheFile(URI.create(CacheURL.WORD_DICT_URL));
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));

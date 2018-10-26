@@ -21,9 +21,9 @@ public class WordCountryCountReducer extends Reducer<TextPair, IntWritable, Text
             sum += value.get();
         }
         if (key.getWord().toString().equals("####")) {
-            outputs.write("countryCount", key.getCountry(), new IntWritable(sum));
+            outputs.write("country", key.getCountry(), new IntWritable(sum));
         } else {
-            outputs.write("wordCountryCount", key, new IntWritable(sum));
+            outputs.write("word", key, new IntWritable(sum));
         }
     }
 }

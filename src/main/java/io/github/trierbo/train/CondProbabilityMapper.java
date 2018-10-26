@@ -1,5 +1,6 @@
 package io.github.trierbo.train;
 
+import io.github.trierbo.utils.CacheURL;
 import io.github.trierbo.utils.TextPair;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -21,10 +22,10 @@ public class CondProbabilityMapper extends Mapper<LongWritable, Text, TextPair, 
     private int sum = 0;
 
     protected void setup(Context context) throws IOException {
-        FileSystem fs = FileSystem.get(URI.create(CondProbability.COUNTRY_URL), context.getConfiguration());
-        try (InputStream inCountry = fs.open(new Path(CondProbability.COUNTRY_URL));
+        FileSystem fs = FileSystem.get(URI.create(CacheURL.COUNTRY_URL), context.getConfiguration());
+        try (InputStream inCountry = fs.open(new Path(CacheURL.COUNTRY_URL));
              BufferedReader readerCountry = new BufferedReader(new InputStreamReader(inCountry));
-             InputStream inWord = fs.open(new Path(CondProbability.WORD_DICT_URL));
+             InputStream inWord = fs.open(new Path(CacheURL.WORD_DICT_URL));
              BufferedReader readerWord = new BufferedReader(new InputStreamReader(inWord))) {
             String line;
             String pair[];

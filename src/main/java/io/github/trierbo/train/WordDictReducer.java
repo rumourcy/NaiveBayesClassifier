@@ -1,5 +1,6 @@
 package io.github.trierbo.train;
 
+import io.github.trierbo.utils.CacheURL;
 import io.github.trierbo.utils.TextPair;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
@@ -21,8 +22,8 @@ public class WordDictReducer extends Reducer<Text, NullWritable, TextPair, IntWr
     private List<String> conutries = new ArrayList<>();
 
     protected void setup(Context context) throws IOException {
-        FileSystem fs = FileSystem.get(URI.create(WordDict.COUNTRY_DICT_URL), context.getConfiguration());
-        try (InputStream in = fs.open(new Path(WordDict.COUNTRY_DICT_URL));
+        FileSystem fs = FileSystem.get(URI.create(CacheURL.COUNTRY_DICT_URL), context.getConfiguration());
+        try (InputStream in = fs.open(new Path(CacheURL.COUNTRY_DICT_URL));
              BufferedReader reader = new BufferedReader(new InputStreamReader(in))) {
             String line;
             while ((line = reader.readLine()) != null) {
