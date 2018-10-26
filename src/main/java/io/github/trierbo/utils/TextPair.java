@@ -22,6 +22,11 @@ public class TextPair implements WritableComparable<TextPair> {
         this.country = country;
     }
 
+    public TextPair(String word, String country) {
+        this.word = new Text(word);
+        this.country = new Text(country);
+    }
+
     public Text getWord() {
         return word;
     }

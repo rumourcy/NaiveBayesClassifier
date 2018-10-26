@@ -4,9 +4,12 @@ import io.github.trierbo.utils.TextPair;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
+import org.apache.hadoop.io.Text;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
+import org.apache.hadoop.mapreduce.lib.output.MultipleOutputs;
+import org.apache.hadoop.mapreduce.lib.output.TextOutputFormat;
 
 public class WordCountryCount {
     public static void main(String[] args) throws Exception {
@@ -24,6 +27,9 @@ public class WordCountryCount {
         job.setReducerClass(WordCountryCountReducer.class);
         job.setOutputKeyClass(TextPair.class);
         job.setOutputValueClass(IntWritable.class);
+
+        MultipleOutputs.addNamedOutput(job, "wordCountryCount", TextOutputFormat.class, TextPair.class, IntWritable.class);
+        MultipleOutputs.addNamedOutput(job, "countryCount", TextOutputFormat.class, Text.class, IntWritable.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));

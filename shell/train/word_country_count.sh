@@ -7,7 +7,7 @@ case ${input} in
         hadoop fs -rm -r result/word_country_count
 		hadoop jar \
             ././../../target/NaiveBayesClassifier-1.0.0.jar \
-            io.github.trierbo.train.WordClassCount \
+            io.github.trierbo.train.WordCountryCount \
             country result/word_country_count
             ;;
     *)

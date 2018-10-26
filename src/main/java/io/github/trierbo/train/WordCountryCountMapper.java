@@ -19,5 +19,7 @@ public class WordCountryCountMapper extends Mapper<LongWritable, Text, TextPair,
         TextPair textPair = new TextPair(value, new Text(country));
         IntWritable one = new IntWritable(1);
         context.write(textPair, one);
+        TextPair clazz = new TextPair("####", country);
+        context.write(clazz, one);
     }
 }
