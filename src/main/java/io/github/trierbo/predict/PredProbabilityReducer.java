@@ -44,16 +44,16 @@ public class PredProbabilityReducer extends Reducer<TextPairs, Text, TripleText,
     protected void reduce(TextPairs key, Iterable<Text> values, Context context) throws IOException, InterruptedException {
         HashMap<String, Double> prob;
         HashMap<String, Double> clazz = new HashMap<>();
+        prob = condPro.get("####");
+        for(String probKey: prob.keySet()) {
+            clazz.put(probKey, prob.get(probKey));
+        }
         for(Text value: values) {
             prob = condPro.get(value.toString());
             for (String probKey: prob.keySet()) {
-                if (!clazz.containsKey(probKey)) {
-                    clazz.put(probKey, prob.get(probKey));
-                } else {
-                    Double clazzProb = clazz.get(probKey);
-                    clazzProb += prob.get(probKey);
-                    clazz.put(probKey, clazzProb);
-                }
+                Double clazzProb = clazz.get(probKey);
+                clazzProb += prob.get(probKey);
+                clazz.put(probKey, clazzProb);
             }
         }
         for(String cla: clazz.keySet()) {

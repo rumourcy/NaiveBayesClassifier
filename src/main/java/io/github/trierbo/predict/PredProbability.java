@@ -34,7 +34,8 @@ public class PredProbability {
 
         job.addCacheFile(URI.create(CacheURL.COND_PROBABILITY_URL));
 
-        FileInputFormat.addInputPath(job, new Path(args[0]));
+        FileInputFormat.addInputPaths(job, args[0]);
+        //FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
         System.exit(job.waitForCompletion(true) ? 0 : 1);

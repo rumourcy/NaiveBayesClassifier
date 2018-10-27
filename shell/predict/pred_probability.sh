@@ -8,7 +8,7 @@ case ${input} in
 		hadoop jar \
             ././../../target/NaiveBayesClassifier-1.0.0.jar \
             io.github.trierbo.predict.PredProbability \
-            test/AUSTR result/predict
+            test/AUSTR,test/BRAZ,test/CANA result/predict
             ;;
     *)
 	exit 1

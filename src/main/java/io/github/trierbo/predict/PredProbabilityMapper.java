@@ -14,7 +14,7 @@ public class PredProbabilityMapper extends Mapper<LongWritable, Text, TextPairs,
         InputSplit inputSplit = context.getInputSplit();
         String path = ((FileSplit) inputSplit).getPath().toString();
         String temp[] = path.split("/");
-        String country = temp[temp.length - 1];
+        String country = temp[temp.length - 2];
         TextPairs outputKey = new TextPairs(path, country);
         context.write(outputKey, value);
     }
