@@ -1,6 +1,6 @@
 package io.github.trierbo.train;
 
-import io.github.trierbo.utils.TextPair;
+import io.github.trierbo.utils.TextPairs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -25,10 +25,10 @@ public class WordCountryCount {
         job.setJarByClass(WordCountryCount.class);
         job.setMapperClass(WordCountryCountMapper.class);
         job.setReducerClass(WordCountryCountReducer.class);
-        job.setOutputKeyClass(TextPair.class);
+        job.setOutputKeyClass(TextPairs.class);
         job.setOutputValueClass(IntWritable.class);
 
-        MultipleOutputs.addNamedOutput(job, "word", TextOutputFormat.class, TextPair.class, IntWritable.class);
+        MultipleOutputs.addNamedOutput(job, "word", TextOutputFormat.class, TextPairs.class, IntWritable.class);
         MultipleOutputs.addNamedOutput(job, "country", TextOutputFormat.class, Text.class, IntWritable.class);
 
         FileInputFormat.addInputPath(job, new Path(args[0]));

@@ -8,21 +8,21 @@ import java.io.DataOutput;
 import java.io.IOException;
 import java.util.Objects;
 
-public class TextPair implements WritableComparable<TextPair> {
+public class TextPairs implements WritableComparable<TextPairs> {
     private Text word;
     private Text country;
 
-    public TextPair() {
-        this.word = new Text();
-        this.country = new Text();
+    public TextPairs() {
+        word = new Text();
+        country = new Text();
     }
 
-    public TextPair(Text word, Text country) {
+    public TextPairs(Text word, Text country) {
         this.word = word;
         this.country = country;
     }
 
-    public TextPair(String word, String country) {
+    public TextPairs(String word, String country) {
         this.word = new Text(word);
         this.country = new Text(country);
     }
@@ -54,23 +54,23 @@ public class TextPair implements WritableComparable<TextPair> {
     }
 
     public boolean equals(Object o) {
-        if (o instanceof TextPair) {
-            TextPair temp = (TextPair)o;
+        if (o instanceof TextPairs) {
+            TextPairs temp = (TextPairs)o;
             return word.equals(temp.word) && country.equals(temp.country);
         }
         return false;
     }
 
-    public int hashCode() {
-        return Objects.hash(word, country);
-    }
-
-    public int compareTo( TextPair textPair) {
+    public int compareTo( TextPairs textPair) {
         int comp = word.compareTo(textPair.word);
         if (comp != 0) {
             return comp;
         }
         return country.compareTo(textPair.country);
+    }
+
+    public int hashCode() {
+        return Objects.hash(word, country);
     }
 
     public String toString() {

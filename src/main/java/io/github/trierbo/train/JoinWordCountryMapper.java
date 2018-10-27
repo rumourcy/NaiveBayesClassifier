@@ -1,8 +1,7 @@
 package io.github.trierbo.train;
 
 import io.github.trierbo.utils.CacheURL;
-import io.github.trierbo.utils.TextPair;
-import org.apache.commons.collections.map.HashedMap;
+import io.github.trierbo.utils.TextPairs;
 import org.apache.hadoop.fs.FileSystem;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -17,9 +16,9 @@ import java.io.InputStreamReader;
 import java.net.URI;
 import java.util.HashMap;
 
-public class JoinWordCountryMapper extends Mapper<LongWritable, Text, TextPair, IntWritable> {
+public class JoinWordCountryMapper extends Mapper<LongWritable, Text, TextPairs, IntWritable> {
 
-    private HashMap<TextPair, Integer> wordCountryMaps = new HashMap<>();
+    private HashMap<TextPairs, Integer> wordCountryMaps = new HashMap<>();
 
     protected void setup(Context context) throws IOException {
         FileSystem fs = FileSystem.get(URI.create(CacheURL.WORD_COUNTRY_URL), context.getConfiguration());
@@ -29,7 +28,7 @@ public class JoinWordCountryMapper extends Mapper<LongWritable, Text, TextPair, 
             String pair[];
             while ((line = reader.readLine()) != null) {
                 pair = line.split("\t");
-                wordCountryMaps.put(new TextPair(pair[0], pair[1]), Integer.parseInt(pair[2]));
+                wordCountryMaps.put(new TextPairs(pair[0], pair[1]), Integer.parseInt(pair[2]));
             }
         }
     }
@@ -37,7 +36,7 @@ public class JoinWordCountryMapper extends Mapper<LongWritable, Text, TextPair, 
     protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
         String line = value.toString();
         String pair[] = line.split("\t");
-        TextPair textPair = new TextPair(pair[0], pair[1]);
+        TextPairs textPair = new TextPairs(pair[0], pair[1]);
         IntWritable count = new IntWritable(Integer.parseInt(pair[2]));
         if (wordCountryMaps.containsKey(textPair)) {
             count.set(wordCountryMaps.get(textPair));

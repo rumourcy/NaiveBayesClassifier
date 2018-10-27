@@ -1,7 +1,7 @@
 package io.github.trierbo.train;
 
 import io.github.trierbo.utils.CacheURL;
-import io.github.trierbo.utils.TextPair;
+import io.github.trierbo.utils.TextPairs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -26,7 +26,7 @@ public class JoinWordCountry {
         job.setJarByClass(JoinWordCountry.class);
         job.setMapperClass(JoinWordCountryMapper.class);
         job.setNumReduceTasks(0);
-        job.setOutputKeyClass(TextPair.class);
+        job.setOutputKeyClass(TextPairs.class);
         job.setOutputValueClass(IntWritable.class);
 
         job.addCacheFile(URI.create(CacheURL.WORD_COUNTRY_URL));

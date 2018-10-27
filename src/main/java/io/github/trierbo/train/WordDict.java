@@ -1,7 +1,7 @@
 package io.github.trierbo.train;
 
 import io.github.trierbo.utils.CacheURL;
-import io.github.trierbo.utils.TextPair;
+import io.github.trierbo.utils.TextPairs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -31,10 +31,10 @@ public class WordDict {
         job.setReducerClass(WordDictReducer.class);
         job.setMapOutputKeyClass(Text.class);
         job.setMapOutputValueClass(NullWritable.class);
-        job.setOutputKeyClass(TextPair.class);
+        job.setOutputKeyClass(TextPairs.class);
         job.setOutputValueClass(IntWritable.class);
 
-        job.addCacheFile(URI.create(CacheURL.COUNTRY_DICT_URL));
+        job.addCacheFile(URI.create(CacheURL.COUNTRY_URL));
 
         FileInputFormat.addInputPath(job, new Path(args[0]));
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
