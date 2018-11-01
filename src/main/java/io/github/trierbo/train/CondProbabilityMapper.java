@@ -31,12 +31,15 @@ public class CondProbabilityMapper extends Mapper<LongWritable, Text, TextPairs,
             String pair[];
             // 记录单词个数总和
             int all = 0;
+            // 记录分类类别数
+            int count = 0;
             while ((line = readerCountry.readLine()) != null) {
                 pair = line.split("\t");
                 countries.put(pair[0], Integer.parseInt(pair[1]));
             }
             for (String key : countries.keySet()) {
                 all += countries.get(key);
+                ++count;
             }
             // 计算每个类别的概率
             for (String key : countries.keySet()) {
@@ -46,6 +49,7 @@ public class CondProbabilityMapper extends Mapper<LongWritable, Text, TextPairs,
             while (readerWord.readLine() != null) {
                 ++sum;
             }
+            sum /= count;
         }
     }
 

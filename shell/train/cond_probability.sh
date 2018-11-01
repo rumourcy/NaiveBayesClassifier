@@ -8,7 +8,7 @@ case ${input} in
 		hadoop jar \
             ././../../target/NaiveBayesClassifier-1.0.0.jar \
             io.github.trierbo.train.CondProbability \
-            result/join_word_country/part-m-00000 result/cond_probability
+            result/join_word_country result/cond_probability
             ;;
     *)
 	exit 1
