@@ -1,6 +1,6 @@
 package io.github.trierbo.train;
 
-import io.github.trierbo.utils.TextPairs;
+import io.github.trierbo.NaiveBayes;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -16,32 +16,32 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
-public class WordCountryCount {
-
-    public static class WordCountryCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
+public class WordCountPerCountry {
+    public static class WordCountPerCountryMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             InputSplit inputSplit = context.getInputSplit();
             String path = ((FileSplit) inputSplit).getPath().toString();
             String temp[] = path.split("/");
             String country = temp[temp.length - 1];
             IntWritable one = new IntWritable(1);
-            context.write(new Text(value.toString() + '_' + country), one);
+            context.write(new Text(country), one);
         }
     }
 
-    public static class WordCountryCountReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
+    public static class WordCountPerCountryReducer extends Reducer<Text, IntWritable, Text, IntWritable> {
         protected void reduce(Text key, Iterable<IntWritable> values, Context context) throws IOException, InterruptedException {
             int sum = 0;
             for (IntWritable value: values) {
                 sum += value.get();
             }
+            NaiveBayes.wordPerCountry.put(key.toString(), sum);
             context.write(key, new IntWritable(sum));
         }
     }
 
     public static void main(String[] args) throws Exception {
         if (args.length != 2) {
-            System.err.println("Usage: WordCountryCount <input path> <output path>");
+            System.err.println("Usage: WordCountPerCountry <input path> <output path>");
             System.exit(-1);
         }
 
@@ -50,12 +50,11 @@ public class WordCountryCount {
         Job job = Job.getInstance(conf);
 
         job.setJarByClass(WordCountryCount.class);
-        job.setMapperClass(WordCountryCountMapper.class);
-        job.setReducerClass(WordCountryCountReducer.class);
-        job.setOutputKeyClass(TextPairs.class);
+        job.setMapperClass(WordCountPerCountryMapper.class);
+        job.setReducerClass(WordCountPerCountryReducer.class);
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        // 多个文件夹作为输入
         FileInputFormat.addInputPaths(job, args[0]);
         FileOutputFormat.setOutputPath(job, new Path(args[1]));
 
