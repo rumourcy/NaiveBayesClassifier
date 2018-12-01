@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-read -r -p "Delete result/word_class_count? [Y/n] " input
+read -r -p "Delete result/word_country_count? [Y/n] " input
 
 case ${input} in
     [yY][eE][sS]|[yY])
