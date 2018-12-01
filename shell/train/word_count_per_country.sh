@@ -8,7 +8,7 @@ case ${input} in
 		hadoop jar \
             ././../../target/NaiveBayesClassifier-1.0.0.jar \
             io.github.trierbo.train.WordCountPerCountry \
-            country/train/AUSTR,country/train/BRAZ,country/train/CANA result/word_count_per_country
+            train result/word_count_per_country
             ;;
     *)
 	exit 1

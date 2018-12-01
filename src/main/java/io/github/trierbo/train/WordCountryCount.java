@@ -1,6 +1,5 @@
 package io.github.trierbo.train;
 
-import io.github.trierbo.utils.TextPairs;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
 import org.apache.hadoop.io.IntWritable;
@@ -52,7 +51,7 @@ public class WordCountryCount {
         job.setJarByClass(WordCountryCount.class);
         job.setMapperClass(WordCountryCountMapper.class);
         job.setReducerClass(WordCountryCountReducer.class);
-        job.setOutputKeyClass(TextPairs.class);
+        job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
         // 多个文件夹作为输入
