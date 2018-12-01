@@ -8,7 +8,6 @@ import org.apache.hadoop.mapreduce.Mapper;
 import java.io.IOException;
 
 public class CondProbability {
-    private static int i = 0;
 
     public static class CondProbabilityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
         // 利用KeyValueTextInputFormat读取数据, 其中key是word_country, value是出现的次数
