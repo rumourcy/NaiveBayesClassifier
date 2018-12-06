@@ -12,11 +12,11 @@ case ${input} in
 		hadoop jar \
             ././../target/NaiveBayesClassifier-1.0.0.jar \
             io.github.trierbo.NaiveBayes \
-            train country/train/AUSTR,country/train/BRAZ,country/train/CANA \
+            train country/train/BRAZ,country/train/CANA \
             result/word_count_per_country result/word_dict \
             result/word_country_count result/cond_probability \
             result/country_count result/country_probability \
-            country/test/AUSTR,country/test/BRAZ,country/test/CANA result/country_predict
+            country/test/BRAZ,country/test/CANA result/country_predict
             ;;
     *)
 	exit 1

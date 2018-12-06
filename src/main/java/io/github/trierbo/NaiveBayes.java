@@ -32,12 +32,19 @@ public class NaiveBayes {
         Configuration conf = new Configuration();
         conf.set("mapreduce.ifile.readahead", "false");
 
+        // Job1用于统计每个分类出现的总词数
         Job job1 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '1');
+        // Job2用于统计训练集中所有不同单词的个数, 用于拉普拉斯平滑
         Job job2 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '2');
+        // Job2用于统计每个分类每个词出现的次数
         Job job3 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '3');
+        // 计算已知分类的条件下每个词出现的概率
         Job job4 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '4');
+        // 统计每个分类中的文件个数
         Job job5 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '5');
+        // 计算每个分类的先验概率
         Job job6 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '6');
+        // 预测每个文件的分类
         Job job7 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '7');
 
         job1.setJarByClass(NaiveBayes.class);
@@ -120,6 +127,7 @@ public class NaiveBayes {
         controlledJob6.setJob(job6);
         controlledJob7.setJob(job7);
 
+        // 添加Job之间的以依赖关系
         controlledJob4.addDependingJob(controlledJob1);
         controlledJob4.addDependingJob(controlledJob2);
         controlledJob4.addDependingJob(controlledJob3);
