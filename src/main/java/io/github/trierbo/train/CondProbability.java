@@ -19,6 +19,7 @@ public class CondProbability {
             // 获取出现次数
             int num = Integer.parseInt(value.toString());
             double prob = Math.log((double) (num + 1) / (NaiveBayes.wordPerCountry.get(country) + NaiveBayes.wordDict));
+            NaiveBayes.condProb.put(key.toString(), prob);
             context.write(key, new DoubleWritable(prob));
         }
     }

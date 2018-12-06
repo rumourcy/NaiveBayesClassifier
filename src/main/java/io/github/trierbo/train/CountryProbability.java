@@ -13,6 +13,7 @@ public class CountryProbability {
         protected void map(Text key, Text value, Context context) throws IOException, InterruptedException {
             int num = Integer.parseInt(value.toString());
             double prob = Math.log((double) num / NaiveBayes.newsNum);
+            NaiveBayes.countryProb.put(key.toString(), prob);
             context.write(key, new DoubleWritable(prob));
         }
     }

@@ -1,13 +1,12 @@
 package io.github.trierbo;
 
+import io.github.trierbo.predict.CountryPredict;
 import io.github.trierbo.train.*;
+import io.github.trierbo.utils.FileNameInputFormat;
 import io.github.trierbo.utils.WholeFileInputFormat;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.fs.Path;
-import org.apache.hadoop.io.DoubleWritable;
-import org.apache.hadoop.io.IntWritable;
-import org.apache.hadoop.io.NullWritable;
-import org.apache.hadoop.io.Text;
+import org.apache.hadoop.io.*;
 import org.apache.hadoop.mapreduce.Job;
 import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 import org.apache.hadoop.mapreduce.lib.input.KeyValueTextInputFormat;
@@ -24,6 +23,10 @@ public class NaiveBayes {
     public static int wordDict = 0;
     // 训练集中文件总数, 用于计算每个类别的概率
     public static int newsNum = 0;
+    // 每个类别下某个单词出现的概率
+    public static HashMap<String, Double> condProb = new HashMap<>();
+    // 每个类别出现的概率
+    public static HashMap<String, Double> countryProb = new HashMap<>();
 
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
@@ -35,6 +38,7 @@ public class NaiveBayes {
         Job job4 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '4');
         Job job5 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '5');
         Job job6 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '6');
+        Job job7 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '7');
 
         job1.setJarByClass(NaiveBayes.class);
         job1.setMapperClass(WordCountPerCountry.WordCountPerCountryMapper.class);
@@ -88,12 +92,25 @@ public class NaiveBayes {
         FileInputFormat.addInputPaths(job6, args[6]);
         FileOutputFormat.setOutputPath(job6, new Path(args[7]));
 
+        job7.setJarByClass(CountryPredict.class);
+        job7.setMapperClass(CountryPredict.CountryPredictMapper.class);
+        job7.setReducerClass(CountryPredict.CountryPredictReducer.class);
+        job7.setMapOutputKeyClass(Text.class);
+        job7.setMapOutputValueClass(MapWritable.class);
+        job7.setOutputKeyClass(Text.class);
+        job7.setOutputValueClass(Text.class);
+        //使用自定义的InputFormat
+        job7.setInputFormatClass(FileNameInputFormat.class);
+        FileInputFormat.addInputPaths(job7, args[8]);
+        FileOutputFormat.setOutputPath(job7, new Path(args[9]));
+
         ControlledJob controlledJob1 = new ControlledJob(conf);
         ControlledJob controlledJob2 = new ControlledJob(conf);
         ControlledJob controlledJob3 = new ControlledJob(conf);
         ControlledJob controlledJob4 = new ControlledJob(conf);
         ControlledJob controlledJob5 = new ControlledJob(conf);
         ControlledJob controlledJob6 = new ControlledJob(conf);
+        ControlledJob controlledJob7 = new ControlledJob(conf);
 
         controlledJob1.setJob(job1);
         controlledJob2.setJob(job2);
@@ -101,11 +118,14 @@ public class NaiveBayes {
         controlledJob4.setJob(job4);
         controlledJob5.setJob(job5);
         controlledJob6.setJob(job6);
+        controlledJob7.setJob(job7);
 
         controlledJob4.addDependingJob(controlledJob1);
         controlledJob4.addDependingJob(controlledJob2);
         controlledJob4.addDependingJob(controlledJob3);
         controlledJob6.addDependingJob(controlledJob5);
+        controlledJob7.addDependingJob(controlledJob4);
+        controlledJob7.addDependingJob(controlledJob6);
 
         JobControl jobControl = new JobControl("NaiveBayes");
         jobControl.addJob(controlledJob1);
@@ -114,6 +134,7 @@ public class NaiveBayes {
         jobControl.addJob(controlledJob4);
         jobControl.addJob(controlledJob5);
         jobControl.addJob(controlledJob6);
+        jobControl.addJob(controlledJob7);
 
         Thread thread = new Thread(jobControl);
         thread.start();
