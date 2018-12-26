@@ -89,6 +89,7 @@ public class NaiveBayes {
 
         job4.setJarByClass(NaiveBayes.class);
         job4.setMapperClass(CondProbability.CondProbabilityMapper.class);
+        // 不进行reduce操作
         job4.setNumReduceTasks(0);
         job4.setOutputKeyClass(Text.class);
         job4.setOutputValueClass(DoubleWritable.class);
@@ -101,7 +102,7 @@ public class NaiveBayes {
         job5.setReducerClass(CountryCount.CountryCountReducer.class);
         job5.setOutputKeyClass(Text.class);
         job5.setOutputValueClass(IntWritable.class);
-        //使用自定义的InputFormat
+        // 使用自定义的InputFormat
         job5.setInputFormatClass(WholeFileInputFormat.class);
         FileInputFormat.addInputPaths(job5, args[1]);
         FileOutputFormat.setOutputPath(job5, new Path(args[6]));
@@ -122,7 +123,7 @@ public class NaiveBayes {
         job7.setMapOutputValueClass(MapWritable.class);
         job7.setOutputKeyClass(Text.class);
         job7.setOutputValueClass(Text.class);
-        //使用自定义的InputFormat
+        // 使用自定义的InputFormat
         job7.setInputFormatClass(FileNameInputFormat.class);
         FileInputFormat.addInputPaths(job7, args[8]);
         FileOutputFormat.setOutputPath(job7, new Path(args[9]));

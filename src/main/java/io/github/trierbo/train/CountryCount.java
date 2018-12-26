@@ -56,7 +56,7 @@ public class CountryCount {
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(IntWritable.class);
 
-        //使用自定义的InputFormat
+        // 使用自定义的InputFormat
         job.setInputFormatClass(WholeFileInputFormat.class);
 
         FileInputFormat.addInputPaths(job, args[0]);
