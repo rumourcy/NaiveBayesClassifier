@@ -7,6 +7,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
+/**
+ * 用于计算条件概率, 即P(A|C)
+ */
 public class CondProbability {
 
     public static class CondProbabilityMapper extends Mapper<Text, Text, Text, DoubleWritable> {

@@ -15,6 +15,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 统计每个类别每个单词出现的次数
+ * 即用于计算P(A|C)的分子
+ */
 public class WordCountryCount {
 
     public static class WordCountryCountMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
@@ -24,6 +28,7 @@ public class WordCountryCount {
             String temp[] = path.split("/");
             String country = temp[temp.length - 1];
             IntWritable one = new IntWritable(1);
+            // key的格式为(单词_类别)
             context.write(new Text(value.toString() + '_' + country), one);
         }
     }

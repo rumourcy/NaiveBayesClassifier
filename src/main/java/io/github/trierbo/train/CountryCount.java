@@ -14,11 +14,16 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 统计每个类别下的文档总数
+ * 用于计算类别的先验概率P(C)
+ */
 public class CountryCount {
 
     public static class CountryCountMapper extends Mapper<Text, IntWritable, Text, IntWritable> {
         @Override
         protected void map(Text key, IntWritable value, Context context) throws IOException, InterruptedException {
+            // 记录所有的文档总数
             NaiveBayes.newsNum++;
             context.write(key, value);
         }

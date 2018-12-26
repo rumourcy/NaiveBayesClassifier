@@ -17,6 +17,7 @@ public class WholeFileRecordReader extends RecordReader<Text, IntWritable> {
         this.fileSplit = (FileSplit) inputSplit;
     }
 
+    // 每个文档是一个split, 只会产生一对key/value
     @Override
     public boolean nextKeyValue() {
         if (!processed) {

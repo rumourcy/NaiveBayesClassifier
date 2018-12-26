@@ -14,6 +14,11 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 统计训练集中的所有不同的单词, 作为词典, 即文档中词所有可能的取值
+ * 将其用于拉普拉斯平滑：
+ * P(A|C) = (该类别下A出现的次数+1) / (该类别下文档的词数+词典大小)
+ */
 public class WordDict {
 
     public static class WordDictMapper extends Mapper<LongWritable, Text, Text, NullWritable> {
@@ -24,6 +29,7 @@ public class WordDict {
 
     public static class WordDictReducer extends Reducer<Text, NullWritable, Text, NullWritable> {
         protected void reduce(Text key, Iterable<NullWritable> values, Context context) throws IOException, InterruptedException {
+            // 每次调用reduce得到一个不同的词
             NaiveBayes.wordDict++;
             context.write(key, NullWritable.get());
         }

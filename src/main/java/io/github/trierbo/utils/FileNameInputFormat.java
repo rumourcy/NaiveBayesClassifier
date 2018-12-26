@@ -8,6 +8,10 @@ import org.apache.hadoop.mapreduce.lib.input.FileInputFormat;
 
 import java.io.IOException;
 
+/**
+ * key: Text 内容为文件路径
+ * value: Text 内容为一行
+ */
 public class FileNameInputFormat extends FileInputFormat<Text, Text> {
     @Override
     public RecordReader<Text, Text> createRecordReader(InputSplit inputSplit, TaskAttemptContext taskAttemptContext) throws IOException, InterruptedException {

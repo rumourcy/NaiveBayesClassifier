@@ -16,6 +16,10 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.util.HashMap;
 
+/**
+ * 贝叶斯公式为:
+ * P(C|AB) ~ P(A|C)*P(B|C)*P(C)
+ */
 public class NaiveBayes {
     // 记录每个类别的总词数, key表示国家名称, value表示总词数
     public static HashMap<String, Integer> wordPerCountry = new HashMap<>();
@@ -28,6 +32,18 @@ public class NaiveBayes {
     // 每个类别出现的概率
     public static HashMap<String, Double> countryProb = new HashMap<>();
 
+    /**
+     * args[0] 将训练集相同类别下所有文档合并之后的路径
+     * args[1] 未作处理的训练集路径, 用于统计每个类别的文档个数, 方便计算类别的先验概率
+     * args[2] Job1的输出路径
+     * args[3] Job2的输出路径
+     * args[4] Job3的输出路径, 以及Job4的输入路径
+     * args[5] Job4的输出路径
+     * args[6] Job5的输出路径, 以及Job6的输入路径
+     * args[7] Job6的输出路径
+     * args[8] 测试集的路径
+     * args[9] 预测结果的输出路径
+     */
     public static void main(String[] args) throws Exception {
         Configuration conf = new Configuration();
         conf.set("mapreduce.ifile.readahead", "false");
@@ -36,15 +52,15 @@ public class NaiveBayes {
         Job job1 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '1');
         // Job2用于统计训练集中所有不同单词的个数, 用于拉普拉斯平滑
         Job job2 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '2');
-        // Job2用于统计每个分类每个词出现的次数
+        // Job3用于统计每个分类每个词出现的次数
         Job job3 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '3');
-        // 计算已知分类的条件下每个词出现的概率
+        // Job4用于计算已知分类的条件下每个词出现的概率
         Job job4 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '4');
-        // 统计每个分类中的文件个数
+        // Job5用于统计每个分类中的文件个数
         Job job5 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '5');
-        // 计算每个分类的先验概率
+        // Job6用于计算每个分类的先验概率
         Job job6 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '6');
-        // 预测每个文件的分类
+        // Job7用于预测每个文件的分类
         Job job7 = Job.getInstance(conf, NaiveBayes.class.getSimpleName() + '7');
 
         job1.setJarByClass(NaiveBayes.class);
@@ -127,11 +143,13 @@ public class NaiveBayes {
         controlledJob6.setJob(job6);
         controlledJob7.setJob(job7);
 
-        // 添加Job之间的以依赖关系
+        // Job4依赖Job1,Job2,Job3
         controlledJob4.addDependingJob(controlledJob1);
         controlledJob4.addDependingJob(controlledJob2);
         controlledJob4.addDependingJob(controlledJob3);
+        // Job6依赖Job5
         controlledJob6.addDependingJob(controlledJob5);
+        // Job7依赖Job4,Job6
         controlledJob7.addDependingJob(controlledJob4);
         controlledJob7.addDependingJob(controlledJob6);
 

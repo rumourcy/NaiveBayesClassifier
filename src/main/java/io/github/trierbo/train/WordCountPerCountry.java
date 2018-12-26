@@ -16,10 +16,16 @@ import org.apache.hadoop.mapreduce.lib.output.FileOutputFormat;
 
 import java.io.IOException;
 
+/**
+ * 统计每个类别下文档的单词总数, 用于计算P(A|C)
+ * 在未进行拉普拉斯平滑时:
+ * P(A|C) = 该类别下A出现的次数/该类别下文档的词数
+ */
 public class WordCountPerCountry {
     public static class WordCountPerCountryMapper extends Mapper<LongWritable, Text, Text, IntWritable> {
         protected void map(LongWritable key, Text value, Context context) throws IOException, InterruptedException {
             InputSplit inputSplit = context.getInputSplit();
+            // 通过文件路径获取类别
             String path = ((FileSplit) inputSplit).getPath().toString();
             String temp[] = path.split("/");
             String country = temp[temp.length - 1];
@@ -34,6 +40,7 @@ public class WordCountPerCountry {
             for (IntWritable value: values) {
                 sum += value.get();
             }
+            // 将统计结果作为中间结果存放在内存中
             NaiveBayes.wordPerCountry.put(key.toString(), sum);
             context.write(key, new IntWritable(sum));
         }

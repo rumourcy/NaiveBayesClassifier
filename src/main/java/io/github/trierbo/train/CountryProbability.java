@@ -7,6 +7,9 @@ import org.apache.hadoop.mapreduce.Mapper;
 
 import java.io.IOException;
 
+/**
+ * 计算每个类别的概率
+ */
 public class CountryProbability {
     public static class CountryProbabilityMapper extends Mapper<Text, Text, Text, DoubleWritable> {
         // 利用KeyValueTextInputFormat读取数据, 其中key是country, value是出现的次数
